@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: microbin
+  name: microbin
+  namespace: microbin
+spec:
+  replicas: 1
+  revisionHistoryLimit: 0
+  selector:
+    matchLabels:
+      app: microbin
+  template:
+    metadata:
+      labels:
+        app: microbin
+    spec:
+      containers:
+        - image: danielszabo99/microbin:latest
+          name: microbin
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+          volumeMounts:
+          - mountPath: /app/microbin_data
+            name: microbin-data
+      volumes:
+        - name: microbin-data
+          persistentVolumeClaim:
+            claimName: microbin-pv-claim
+
+          
